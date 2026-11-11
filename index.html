@@ -106,6 +106,7 @@ const SHEET_EDIT='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/edit';
 const SHEET_PUB='https://docs.google.com/spreadsheets/d/e/2PACX-1vR61ywI1X2-ZETRlSobcRrFa8nJMDBoK5tOFX6hzDhIk84c7kNsUjOPW-cdjtoQ8A2tHNVFI70KSC_J/pub';
 const SHEET_TABS={monitoring:0,harian:348949012,kaizen:1112057117};
 const SKEY='tjfi-settings-v3';
+const ELEC_FACTOR=.783; // kg CO₂e/kWh — koefisien listrik Indonesia (resmi, dikunci)
 const FY_IDX=Object.fromEntries(MONTHS.map((m,i)=>[m,i+1]));
 const PLANT_IDS={'Plant 1':'p-1','Plant 2':'p-2'};
 const ITEM_FIELD={'Electricity':'electricity','PGN Gas':'gas','Solar':'diesel','Supplied Water (Industrial Water)':'water','Discharge Water (Sewage)':'discharge','Incineration without heat recovery':'b3','Valuable waste, sold materials':'economic'};
@@ -122,11 +123,11 @@ function seed(){
   {id:'p-2',code:'P2',name:'Plant 2',departments:['HRGA','Assembling','Machining','Maintenance','PPIC','Purchasing','QA & QC']}],
   records:[],kaizens:[],dailyReadings:[],
   settings:{baselineYear:2025,targetReductionPct:12,
-   factors:{electricity:.443,gas:2.23,diesel:2.58,gasoline:0}, // kg CO₂e per satuan — koefisien resmi TJFI
+   factors:{electricity:ELEC_FACTOR,gas:2.23,diesel:2.58,gasoline:0}, // kg CO₂e per satuan — koefisien resmi TJFI
    dailyAlertPct:30,gasIdleLimit:100,waterIdleLimit:30,gasMinimumIncrease:5,waterMinimumIncrease:5}};
 }
 function validDB(d){return d&&Array.isArray(d.plants)&&Array.isArray(d.records)&&Array.isArray(d.kaizens)&&d.settings&&d.settings.factors;}
-function load(){const d=seed();try{const s=JSON.parse(localStorage.getItem(SKEY));if(s&&s.factors)d.settings={...d.settings,...s,factors:{...d.settings.factors,...s.factors}}}catch(e){}return d}
+function load(){const d=seed();try{const s=JSON.parse(localStorage.getItem(SKEY));if(s&&s.factors)d.settings={...d.settings,...s,factors:{...d.settings.factors,...s.factors}}}catch(e){}d.settings.factors.electricity=ELEC_FACTOR;return d}
 
 function splitCsv(line){const out=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];
  if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++}else inQ=!inQ}else if(ch===','&&!inQ){out.push(cur);cur=''}else cur+=ch}
@@ -3619,7 +3620,7 @@ function kzImpactCard(){
  if(!r.length)return `<section class="card card-pad section-space">${header('Dampak Kaizen Listrik terhadap Emisi Bulanan','Perbandingan emisi listrik aktual dengan emisi andaikan tanpa Kaizen',toggle)}${empty('Belum ada data listrik bulanan untuk periode ini')}</section>`;
  const tot=r.reduce((a,x)=>({act:a.act+x.act_t,sav:a.sav+x.sav_t}),{act:0,sav:0}),totPct=tot.sav/(tot.act+tot.sav)*100;
  const chartHtml=chart([{name:'Tanpa Kaizen',color:'#9cb7ac',dashed:true,values:Array.from({length:ui.month},(_,i)=>{const x=r.find(y=>y.m===i+1);return x?x.without:NaN})},{name:'Aktual',color:COLORS[0],values:Array.from({length:ui.month},(_,i)=>{const x=r.find(y=>y.m===i+1);return x?x.act_t:NaN})}],'ton CO₂e');
- return `<section class="card card-pad section-space">${header('Dampak Kaizen Listrik terhadap Emisi Bulanan','Emisi listrik (Scope 2) aktual vs emisi andaikan tanpa Kaizen · ton CO₂e',toggle)}
+ return `<section class="card card-pad section-space">${header('Dampak Kaizen Listrik terhadap Emisi Bulanan',`Emisi listrik (Scope 2) aktual vs andaikan tanpa Kaizen · ton CO₂e = kWh × ${db.settings.factors.electricity} kg CO₂e/kWh (koefisien Indonesia)`,toggle)}
  <div class="legend" style="margin:10px 0 0"><span><i style="background:${COLORS[0]}"></i>Aktual (meter bulanan)</span><span><i style="background:#9cb7ac"></i>Andaikan tanpa Kaizen</span></div>
  <div class="chart-wrap">${chartHtml}</div>
  <div class="metric-compact" style="margin-top:14px"><div class="card"><div class="label">Emisi listrik aktual (YTD)</div><div class="value">${fmt(tot.act,1)}<span class="unit">ton CO₂e</span></div></div><div class="card"><div class="label">Dihemat oleh Kaizen (YTD)</div><div class="value">${fmt(tot.sav,1)}<span class="unit">ton CO₂e</span></div></div><div class="card"><div class="label">Porsi penghematan</div><div class="value">${fmt(totPct,1)}<span class="unit">%</span></div><div class="plant-sub">dari emisi listrik andaikan tanpa Kaizen</div></div></div>
