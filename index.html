@@ -3580,6 +3580,8 @@ function dailyAnalyzed(){
 function dailyPlantOK(x){return x.row.type==='gas'?x.row.plantId==='p-1':(ui.plant==='all'||x.row.plantId===ui.plant)}
 function dailyScope(type=ui.dailyType){return dailyAnalyzed().filter(x=>x.row.type===type&&dailyPlantOK(x)&&dfp(x.row.date)===ym(ui.year,ui.month)&&(ui.dailyDept==='all'||x.row.department===ui.dailyDept)).sort((a,b)=>b.row.date.localeCompare(a.row.date)||plantName(a.row.plantId).localeCompare(plantName(b.row.plantId)))}
 function dailyBadge(s){return s==='alert'?'<span class="daily-badge daily-danger">Periksa ⚠</span>':s==='normal'?'<span class="daily-badge daily-good">Normal</span>':s==='gap'?'<span class="daily-badge daily-warn">Data terlewat</span>':s==='reset'?'<span class="daily-badge daily-danger">Periksa meter</span>':'<span class="daily-badge daily-unknown">Baseline</span>'}
+const FULLMON=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function monthName(){const d=monthDays();return FULLMON[d.m-1]+' '+d.y}
 function monthDays(){const i=ui.month,m=i<=9?i+3:i-9,y=i<=9?ui.year:ui.year+1;return{y,m,n:new Date(y,m,0).getDate()}}
 function monthChart(rows,color,label){
  const {y,m,n}=monthDays(),pad=v=>String(v).padStart(2,'0'),by=new Map();
@@ -3591,12 +3593,12 @@ function monthChart(rows,color,label){
  for(let d=1;d<=n;d++){const e=by.get(d),x=L+(d-1)*w+w*.15;
   if(e){const bar=Math.max(1,e.v/max*(H-T-B));svg+=`<rect x="${x}" y="${H-B-bar}" width="${Math.max(3,w*.7)}" height="${bar}" rx="2" fill="${e.alert?'#d76467':color}"><title>${pad(d)}/${pad(m)}/${y} • ${h(label)} • ${nf(e.v,2)} m³${e.alert?' • perlu pemeriksaan':''}</title></rect>`}
   if(d===1||d%2===1||d===n)svg+=`<text x="${x+w*.35}" y="${H-14}" text-anchor="middle" font-size="10" fill="#7e918a">${d}</text>`}
- svg+=`<text x="${W-R}" y="${H-2}" text-anchor="end" font-size="10" fill="#75877f">Tanggal 1–${n} · merah = indikasi anomali</text></svg>`;return svg;
+ svg+=`<text x="${W-R}" y="${H-2}" text-anchor="end" font-size="10" fill="#75877f">${monthName()} · tanggal 1–${n} · merah = anomali</text></svg>`;return svg;
 }
 function dailyPlot(rows,type){
  const col={'p-1':'#528cb6','p-2':'#e09a3e'};
  const plants=(type==='gas'?db.plants.filter(p=>p.id==='p-1'):db.plants.filter(p=>ui.plant==='all'||p.id===ui.plant));
- return plants.map(p=>`<div style="margin-bottom:14px"><div class="plant-sub" style="font-weight:700;margin:2px 0 4px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${type==='gas'?'#168f75':col[p.id]||'#528cb6'};margin-right:6px"></span>${h(p.name)} · m³ per hari</div>${monthChart(rows.filter(x=>x.row.plantId===p.id),type==='gas'?'#168f75':col[p.id]||'#528cb6',p.name)}</div>`).join('');
+ return plants.map(p=>`<div style="margin-bottom:14px"><div class="plant-sub" style="font-weight:700;margin:2px 0 4px"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${type==='gas'?'#168f75':col[p.id]||'#528cb6'};margin-right:6px"></span>${h(p.name)} · ${monthName()} · m³ per hari</div>${monthChart(rows.filter(x=>x.row.plantId===p.id),type==='gas'?'#168f75':col[p.id]||'#528cb6',p.name)}</div>`).join('');
 }
 function dailyOverviewAlerts(){
  const rows=dailyAnalyzed().filter(x=>x.status==='alert'&&dfp(x.row.date)===ym(ui.year,ui.month)&&(ui.plant==='all'||x.row.plantId===ui.plant));
