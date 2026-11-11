@@ -3710,7 +3710,7 @@ document.addEventListener('submit',e=>{
 });
 
 /* ===================== INPUT: tulis ke Google Sheet via Apps Script ===================== */
-const WRITE_URL='';
+const WRITE_URL='https://script.google.com/macros/s/AKfycbxaC-ox-PZi3ekOnUsLTsVaL3j2vSA0yvibUYgRDXpt6AvzB0mTmfN9Z0-tRqldcWpM/exec';
 const WKEY='tjfi-write-url-v1',PKEY='tjfi-passcode-v1';
 function writeUrl(){try{return WRITE_URL||localStorage.getItem(WKEY)||''}catch(e){return WRITE_URL}}
 function passcode(){try{return localStorage.getItem(PKEY)||''}catch(e){return ''}}
