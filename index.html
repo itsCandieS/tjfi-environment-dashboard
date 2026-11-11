@@ -3504,15 +3504,16 @@ function getStats(){const rows=recordsNow(),s=sums(rows),base=baselinePair(rows)
 function trend(key='kg',subset=selectedPlants(),year=ui.year,month=ui.month){const data=[];for(let m=1;m<=month;m++){const period=ym(year,m),rows=db.records.filter(r=>r.period===period&&subset.some(p=>p.id===r.plantId));data.push(rows.length?key==='kg'?kgToTon(sums(rows).kg):sums(rows)[key]:null)}return data}
 function baselineTrend(subset=selectedPlants()){return trend('kg',subset,Number(db.settings.baselineYear),ui.month)}
 function chart(series,kind='ton CO₂e'){
- const all=series.flatMap(s=>s.values.filter(v=>Number.isFinite(v)));if(!all.length)return '<div class="no-data-graph">Belum tersedia data untuk periode yang dipilih.</div>';
- const high=Math.max(...all,1),low=Math.min(...all),pad=Math.max((high-low)*.27,high*.045,1),max=high+pad,min=Math.max(0,low-pad),W=760,H=246,L=57,R=18,T=16,B=37,plotW=W-L-R,plotH=H-T-B,count=Math.max(...series.map(s=>s.values.length),1),x=i=>L+(count===1?plotW/2:i*plotW/(count-1)),y=v=>T+(max-v)*plotH/(max-min);
- let str=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik tren bulanan dalam ${h(kind)}">`;
- for(let j=0;j<5;j++){const val=max-(max-min)*j/4,yy=T+j*plotH;str+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#e8efeb" stroke-dasharray="${j===4?'0':'4 4'}"/><text x="${L-9}" y="${yy+4}" text-anchor="end" font-size="11" fill="#94a59c">${h(nf(val,0))}</text>`}
- for(let i=0;i<count;i++)str+=`<text x="${x(i)}" y="${H-11}" fill="#8ea199" font-size="11" text-anchor="middle">${MONTHS[i]}</text>`;
- for(const s of series){let segment=[];const paths=[];s.values.forEach((v,i)=>{if(Number.isFinite(v))segment.push([x(i),y(v)]);else if(segment.length){paths.push(segment);segment=[]}});if(segment.length)paths.push(segment);
-  for(const pts of paths){if(pts.length>1)str+=`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" stroke="${s.color}" stroke-width="${s.dashed?'2':'3'}" stroke-dasharray="${s.dashed?'6 5':'none'}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
-  s.values.forEach((v,i)=>{if(Number.isFinite(v))str+=`<circle cx="${x(i)}" cy="${y(v)}" r="${s.dashed?3:4}" fill="white" stroke="${s.color}" stroke-width="2"><title>${h(s.name)} - ${MONTHS[i]}: ${fmt(v,1)} ${h(kind)}</title></circle>`})
- }
+ series=series.filter(s=>s.values.some(v=>Number.isFinite(v)));
+ if(!series.length)return '<div class="no-data-graph">Belum tersedia data untuk periode yang dipilih.</div>';
+ const all=series.flatMap(s=>s.values.filter(v=>Number.isFinite(v))),max=Math.max(...all,1)*1.18,W=760,H=262,L=57,R=14,T=24,B=34,plotW=W-L-R,plotH=H-T-B,count=Math.max(...series.map(s=>s.values.length),1),n=series.length,slot=plotW/count,bw=Math.min(34,slot*.78/n);
+ const short=v=>Math.abs(v)>=1e6?nf(v/1e6,1)+' jt':Math.abs(v)>=1e4?nf(v/1e3,0)+' rb':Math.abs(v)>=1e3?nf(v/1e3,1)+' rb':v===0?'0':nf(v,v<10?1:0);
+ let str=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik batang bulanan dalam ${h(kind)}">`;
+ for(let j=0;j<5;j++){const val=max*(1-j/4),yy=T+j*plotH/4;str+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#e8efeb" stroke-dasharray="${j===4?'0':'4 4'}"/><text x="${L-9}" y="${yy+4}" text-anchor="end" font-size="11" fill="#94a59c">${h(short(val))}</text>`}
+ for(let i=0;i<count;i++){const cx=L+slot*(i+.5);str+=`<text x="${cx}" y="${H-12}" fill="#6f847b" font-size="11" text-anchor="middle">${MONTHS[i]}</text>`;
+  series.forEach((sr,k)=>{const v=sr.values[i];if(!Number.isFinite(v))return;const bh=Math.max(1,v/max*plotH),x=cx-bw*n/2+k*bw,y=T+plotH-bh,main=!sr.dashed;
+   str+=`<rect x="${x}" y="${y}" width="${bw-1.5}" height="${bh}" rx="3" fill="${sr.color}" ${sr.dashed?'opacity=".55"':''}><title>${h(sr.name)} - ${MONTHS[i]}: ${fmt(v,1)} ${h(kind)}</title></rect>`;
+   if(main&&slot>=36)str+=`<text x="${x+(bw-1.5)/2}" y="${y-5}" text-anchor="middle" font-size="10" font-weight="700" fill="#33463e">${h(short(v))}</text>`})}
  return str+'</svg>';
 }
 function donut(s){const f=db.settings.factors,parts=[s.electricity*f.electricity,s.gas*f.gas,s.diesel*f.diesel];let current=0;const total=parts.reduce((a,b)=>a+b,0);const stops=parts.map((v,i)=>{const from=current;current+=total?v/total*100:100/3;return `${COLORS[i]} ${from}% ${current}%`}).join(',');return `<div class="donut-layout"><div class="donut" style="background:conic-gradient(${total?stops:'#e8f0eb 0% 100%'})"><div class="donut-center"><strong>${fmt(kgToTon(total),1)}</strong><small>ton CO₂e</small></div></div><div class="breakdown-legend">${parts.map((v,i)=>`<div class="breakrow"><div class="kind"><i style="background:${COLORS[i]}"></i>${['Listrik','Gas alam','Solar'][i]}</div><b>${total?fmt(v/total*100,1):0}%</b></div>`).join('')}</div></div>`}
