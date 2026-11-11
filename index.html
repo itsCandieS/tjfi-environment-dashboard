@@ -152,7 +152,7 @@ function applyData(src,resetPeriod){
  db.records=[...recs.values()];
  db.dailyReadings=[];
  for(const r of day){
-  const m=DAILY_METERS[r.plant+'|'+r.item];if(!m||!/^\d{4}-\d{2}-\d{2}/.test(r.date))continue;
+  const m=DAILY_METERS[r.plant+'|'+r.item];if(!m||!/^\d{4}-\d{2}-\d{2}/.test(r.date)||String(r.qty==null?'':r.qty).trim()==='')continue;
   const date=r.date.slice(0,10),dow=new Date(date+'T00:00:00Z').getUTCDay();
   db.dailyReadings.push({id:'sh-'+m[2]+'-'+date,plantId:m[0],department:'Seluruh plant',type:m[1],meterId:m[2],date,mode:'daily',value:NUM(r.qty),operation:dow===0?'idle':'operating',notes:'',updatedAt:'Google Sheet'});
  }
@@ -2533,30 +2533,30 @@ const FALLBACK_DAY=`date,fiscal_year,month,plant,item,qty
 2025-10-14,2025,Okt,Plant 2,Discharge Water (Sewage),57.0
 2025-10-15,2025,Okt,Plant 2,Supplied Water (Industrial Water),78.0
 2025-10-15,2025,Okt,Plant 2,Discharge Water (Sewage),58.5
-2025-10-16,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-16,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-17,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-17,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-18,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-18,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-19,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-19,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-20,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-20,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-21,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-21,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-22,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-22,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-23,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-23,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-24,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-24,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-25,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-25,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-26,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-26,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
-2025-10-27,2025,Okt,Plant 2,Supplied Water (Industrial Water),0.0
-2025-10-27,2025,Okt,Plant 2,Discharge Water (Sewage),0.0
+2025-10-16,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-16,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-17,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-17,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-18,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-18,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-19,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-19,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-20,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-20,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-21,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-21,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-22,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-22,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-23,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-23,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-24,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-24,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-25,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-25,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-26,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-26,2025,Okt,Plant 2,Discharge Water (Sewage),
+2025-10-27,2025,Okt,Plant 2,Supplied Water (Industrial Water),
+2025-10-27,2025,Okt,Plant 2,Discharge Water (Sewage),
 2025-10-28,2025,Okt,Plant 2,Supplied Water (Industrial Water),7.0
 2025-10-28,2025,Okt,Plant 2,Discharge Water (Sewage),5.25
 2025-10-29,2025,Okt,Plant 2,Supplied Water (Industrial Water),15.0
@@ -3081,56 +3081,56 @@ const FALLBACK_DAY=`date,fiscal_year,month,plant,item,qty
 2026-07-15,2026,Jul,Plant 1,Discharge Water (Sewage),37.5
 2026-07-16,2026,Jul,Plant 1,Supplied Water (Industrial Water),50.0
 2026-07-16,2026,Jul,Plant 1,Discharge Water (Sewage),37.5
-2026-07-17,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-17,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-18,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-18,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-19,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-19,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-20,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-20,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-21,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-21,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-22,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-22,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-23,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-23,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-24,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-24,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-25,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-25,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-26,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-26,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-27,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-27,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-28,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-28,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-29,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-29,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-30,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-30,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-07-31,2026,Jul,Plant 1,Supplied Water (Industrial Water),0.0
-2026-07-31,2026,Jul,Plant 1,Discharge Water (Sewage),0.0
-2026-08-01,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-01,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-02,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-02,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-03,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-03,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-04,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-04,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-05,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-05,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-06,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-06,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-07,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-07,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-08,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-08,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-09,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-09,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-10,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-10,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
+2026-07-17,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-17,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-18,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-18,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-19,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-19,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-20,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-20,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-21,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-21,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-22,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-22,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-23,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-23,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-24,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-24,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-25,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-25,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-26,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-26,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-27,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-27,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-28,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-28,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-29,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-29,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-30,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-30,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-07-31,2026,Jul,Plant 1,Supplied Water (Industrial Water),
+2026-07-31,2026,Jul,Plant 1,Discharge Water (Sewage),
+2026-08-01,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-01,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-02,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-02,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-03,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-03,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-04,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-04,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-05,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-05,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-06,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-06,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-07,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-07,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-08,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-08,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-09,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-09,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-10,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-10,2026,Agu,Plant 1,Discharge Water (Sewage),
 2026-08-11,2026,Agu,Plant 1,Supplied Water (Industrial Water),47.0
 2026-08-11,2026,Agu,Plant 1,Discharge Water (Sewage),35.25
 2026-08-12,2026,Agu,Plant 1,Supplied Water (Industrial Water),52.0
@@ -3145,34 +3145,34 @@ const FALLBACK_DAY=`date,fiscal_year,month,plant,item,qty
 2026-08-16,2026,Agu,Plant 1,Discharge Water (Sewage),12.75
 2026-08-17,2026,Agu,Plant 1,Supplied Water (Industrial Water),10.0
 2026-08-17,2026,Agu,Plant 1,Discharge Water (Sewage),7.5
-2026-08-18,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-18,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-19,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-19,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-20,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-20,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-21,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-21,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-22,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-22,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-23,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-23,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-24,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-24,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-25,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-25,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-26,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-26,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-27,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-27,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-28,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-28,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-29,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-29,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-30,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-30,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
-2026-08-31,2026,Agu,Plant 1,Supplied Water (Industrial Water),0.0
-2026-08-31,2026,Agu,Plant 1,Discharge Water (Sewage),0.0
+2026-08-18,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-18,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-19,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-19,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-20,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-20,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-21,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-21,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-22,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-22,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-23,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-23,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-24,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-24,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-25,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-25,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-26,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-26,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-27,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-27,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-28,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-28,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-29,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-29,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-30,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-30,2026,Agu,Plant 1,Discharge Water (Sewage),
+2026-08-31,2026,Agu,Plant 1,Supplied Water (Industrial Water),
+2026-08-31,2026,Agu,Plant 1,Discharge Water (Sewage),
 2026-04-01,2026,Apr,Plant 2,Supplied Water (Industrial Water),18.0
 2026-04-01,2026,Apr,Plant 2,Discharge Water (Sewage),13.5
 2026-04-02,2026,Apr,Plant 2,Supplied Water (Industrial Water),18.0
@@ -3451,34 +3451,34 @@ const FALLBACK_DAY=`date,fiscal_year,month,plant,item,qty
 2026-08-16,2026,Agu,Plant 2,Discharge Water (Sewage),1.5
 2026-08-17,2026,Agu,Plant 2,Supplied Water (Industrial Water),1.0
 2026-08-17,2026,Agu,Plant 2,Discharge Water (Sewage),0.75
-2026-08-18,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-18,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-19,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-19,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-20,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-20,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-21,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-21,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-22,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-22,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-23,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-23,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-24,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-24,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-25,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-25,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-26,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-26,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-27,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-27,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-28,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-28,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-29,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-29,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-30,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-30,2026,Agu,Plant 2,Discharge Water (Sewage),0.0
-2026-08-31,2026,Agu,Plant 2,Supplied Water (Industrial Water),0.0
-2026-08-31,2026,Agu,Plant 2,Discharge Water (Sewage),0.0`;
+2026-08-18,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-18,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-19,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-19,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-20,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-20,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-21,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-21,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-22,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-22,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-23,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-23,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-24,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-24,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-25,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-25,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-26,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-26,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-27,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-27,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-28,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-28,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-29,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-29,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-30,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-30,2026,Agu,Plant 2,Discharge Water (Sewage),
+2026-08-31,2026,Agu,Plant 2,Supplied Water (Industrial Water),
+2026-08-31,2026,Agu,Plant 2,Discharge Water (Sewage),`;
 const FALLBACK_KZ=`kaizen_id,title,category,plant,item,saving_qty_per_month,unit,start_fiscal_year,start_month,status,pic,notes
 KZN-001,[1.1] Install inverter for motor hydraulic pump — PRESS MACHINE,Install Inverter,Plant 2,Electricity,645.0,kWh,2015,Feb,Selesai,Maintenance,Ref 1.1 · Line: SUB ASSY AXLE N-SERIES · Sebelum 800 kWh/bln → sesudah 155 kWh/bln · Sumber: Co2_Reduce.xlsx (Summary-JPN)
 KZN-002,[1.2] Install inverter for motor hydraulic pump — PRESS MACHINE,Install Inverter,Plant 2,Electricity,645.0,kWh,2015,Feb,Selesai,Maintenance,Ref 1.2 · Line: SUB ASSY AXLE F-SERIES · Sebelum 800 kWh/bln → sesudah 155 kWh/bln · Sumber: Co2_Reduce.xlsx (Summary-JPN)
