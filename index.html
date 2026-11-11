@@ -65,7 +65,7 @@
     <button class="nav-item" data-nav="daily"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 3v7m0 4v7M2 8h4M2 17h4M11 12h10M11 18h7M11 6h9"/><path d="M7 8c1 1 2 2 2 4s-1 3-2 4"/></svg> Daily Gas &amp; Water <span class="tiny-nav-tag">NEW</span></button>
     <button class="nav-item" data-nav="kaizen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6m-5 4h4m-7-8a7 7 0 1 1 10 0c-1 1-2 2-2 4H9c0-2-1-3-2-4Z"/></svg> Kaizen Tracker</button>
     <div class="nav-label" style="padding-top:24px">MANAGEMENT</div>
-    <button class="nav-item" data-nav="input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="10"/></svg> Sumber Data</button>
+    <button class="nav-item" data-nav="input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="10"/></svg> Input Data</button>
     <button class="nav-item" data-nav="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15.5l1.1 1.8-2.2 2.2-1.8-1.1a8 8 0 0 1-2.1.9l-.5 2.1h-3.1l-.5-2.1a8 8 0 0 1-2.1-.9l-1.8 1.1-2.2-2.2 1.1-1.8a8 8 0 0 1-.9-2.1L2.3 13v-3l2.1-.5a8 8 0 0 1 .9-2.1L4.2 5.6l2.2-2.2 1.8 1.1a8 8 0 0 1 2.1-.9l.5-2.1h3.1l.5 2.1a8 8 0 0 1 2.1.9l1.8-1.1 2.2 2.2-1.1 1.8a8 8 0 0 1 .9 2.1l2.1.5v3l-2.1.5a8 8 0 0 1-.9 2.1Z"/></svg> Pengaturan</button>
   </nav>
   <div class="nav-spacer"></div>
@@ -91,7 +91,7 @@ const KEY='tjforge-environment-prototype-v2-plant-dept-daily';
 const MONTHS=['Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des','Jan','Feb','Mar']; // tahun fiskal April–Maret (indeks 1..12)
 const COLORS=['#10a77f','#548ab6','#e9a251','#c96969'];
 const TYPES={electricity:{label:'Listrik',unit:'kWh'},gas:{label:'Gas alam',unit:'m³'},diesel:{label:'Solar / Diesel',unit:'liter'},gasoline:{label:'Bensin',unit:'liter'},direct:{label:'CO₂e langsung',unit:'ton CO₂e'}};
-const PAGES={overview:['Overview','Ringkasan performa lingkungan PT TJForge Indonesia'],energy:['Energy & CO₂e','Konsumsi energi dan perhitungan emisi'],water:['Water & Waste','Monitoring industrial water dan limbah'],daily:['Daily Gas & Water','Pencatatan meter harian dan deteksi indikasi kebocoran'],kaizen:['Kaizen Tracker','Aktivitas perbaikan dan pengurangan CO₂e'],input:['Sumber Data','Dashboard membaca data langsung dari Google Spreadsheet'],settings:['Pengaturan','Faktor emisi, target, plant, dan departemen']};
+const PAGES={overview:['Overview','Ringkasan performa lingkungan PT TJForge Indonesia'],energy:['Energy & CO₂e','Konsumsi energi dan perhitungan emisi'],water:['Water & Waste','Monitoring industrial water dan limbah'],daily:['Daily Gas & Water','Pencatatan meter harian dan deteksi indikasi kebocoran'],kaizen:['Kaizen Tracker','Aktivitas perbaikan dan pengurangan CO₂e'],input:['Input Data','Input data ke Google Sheet dan informasi sumber data'],settings:['Pengaturan','Faktor emisi, target, plant, dan departemen']};
 const ico={bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2 4 13h7l-1 9 10-12h-8l1-8Z"/></svg>',down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6l7 7 4-4 7 7"/><path d="M16 16h5v-5"/></svg>',leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 4C11 4 5 8 5 15a5 5 0 0 0 5 5c7 0 10-6 10-16Z"/><path d="M4 21c2-6 6-9 11-12"/></svg>',water:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2s-7 8.6-7 13a7 7 0 0 0 14 0C19 10.6 12 2 12 2Z"/></svg>',waste:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3m-9 0 1 14h10l1-14M10 11v6m4-6v6"/></svg>',recycle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m7 7 2-4h5l3 5M16 3l1 5-5 1M20 11l2 4-3 5h-6m6 0-4-4 1-4M10 20H5l-3-5 3-5M2 15l5-1 3 4"/></svg>',plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>',download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m-5-5 5 5 5-5M5 17v4h14v-4"/></svg>'};
 const h=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nf=(v,d=0)=>new Intl.NumberFormat('id-ID',{maximumFractionDigits:d,minimumFractionDigits:d}).format(Number(v)||0);
@@ -3506,18 +3506,18 @@ function overview(){const st=getStats(),pct=st.pct,target=sv(db.settings.targetR
  <p class="footnote">* Data aktual PT TJFI dari Google Spreadsheet (tahun fiskal April–Maret). Koefisien: Listrik 0,443 kg CO₂e/kWh, PGN Gas 2,23 kg CO₂e/m³, Solar 2,58 kg CO₂e/liter. Data produksi (Ton), rincian listrik per area, dan register Kaizen akan muncul setelah diisi di Sheet. Pemakaian harian tidak dijumlahkan ke total bulanan.</p>`;
 }
 function energy(){const st=getStats(),f=db.settings.factors,rows=st.rows.slice().sort((a,b)=>b.period.localeCompare(a.period)||plantName(a.plantId).localeCompare(plantName(b.plantId)));
- return `${pageIntro('Energy Consumption & CO₂e','Monitoring input energi dan estimasi emisi Scope 1 & Scope 2 operasional.',`<button class="btn btn-primary" data-action="new-consumption">Sumber data</button><button class="btn" data-nav="daily">Meter gas harian</button><button class="btn" data-action="export-csv">${ico.download} Ekspor CSV</button>`)}
+ return `${pageIntro('Energy Consumption & CO₂e','Monitoring input energi dan estimasi emisi Scope 1 & Scope 2 operasional.',`<button class="btn btn-primary" data-action="new-consumption">Input data</button><button class="btn" data-nav="daily">Meter gas harian</button><button class="btn" data-action="export-csv">${ico.download} Ekspor CSV</button>`)}
  <div class="metric-compact"><div class="card"><div class="label">Listrik</div><div class="value">${nf(st.s.electricity)}<span class="unit">kWh</span></div></div><div class="card"><div class="label">Gas alam</div><div class="value">${nf(st.s.gas)}<span class="unit">m³</span></div></div><div class="card"><div class="label">Bahan bakar · Solar</div><div class="value">${nf(st.s.diesel+st.s.gasoline)}<span class="unit">liter</span></div></div></div>
  ${noticeCoverage(st)}<div class="two-col section-space"><section class="card card-pad">${header('Emisi CO₂e per Bulan','ton CO₂e · seluruh sumber energi terpilih')}<div class="chart-wrap">${chart([{name:'Aktual',values:trend(),color:COLORS[0]},{name:'Baseline',values:ui.year===Number(db.settings.baselineYear)?[]:baselineTrend(),color:'#a6beb1',dashed:true}])}</div></section><section class="card card-pad">${header('Kontribusi Tiap Energi','Estimasi CO₂e dari faktor yang sedang digunakan')}${donut(st.s)}<p class="footnote">Listrik diklasifikasikan sebagai Scope 2; pembakaran bahan bakar dan gas yang dikendalikan perusahaan umumnya Scope 1. Faktor dan batas organisasi wajib diverifikasi.</p></section></div>
  <section class="card card-pad section-space">${header('Log Konsumsi & Emisi','Klik edit untuk memuat kembali data plant dan bulan ke formulir')}${rows.length?`<div class="table-shell" style="margin-top:15px"><table><thead><tr><th>Periode</th><th>Plant</th><th>Listrik (kWh)</th><th>Gas (m³)</th><th>Solar (L)</th><th>CO₂e (ton)</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${h(r.period)}</td><td><b>${h(plantName(r.plantId))}</b></td><td>${nf(r.electricity)}</td><td>${nf(r.gas)}</td><td>${nf(r.diesel)}</td><td><b>${fmt(kgToTon(emission(r)),2)}</b></td></tr>`).join('')}</tbody></table></div>`:empty('Belum ada data konsumsi')}</section>
  <div class="notice">Faktor emisi resmi TJFI yang aktif: listrik ${f.electricity} kg CO₂e/kWh; gas ${f.gas} kg CO₂e/m³; solar ${f.diesel} kg CO₂e/L. Ubah di <button class="linkish" data-nav="settings">Pengaturan</button>.</div>`;
 }
-function water(){const st=getStats(),rows=st.rows.slice().sort((a,b)=>b.period.localeCompare(a.period));const water=trend('water'),b3=trend('b3'),econ=trend('economic');return `${pageIntro('Industrial Water & Waste','Pantau konsumsi air, limbah insinerasi, dan valuable waste (dijual) per plant.',`<button class="btn btn-primary" data-action="new-consumption">Sumber data</button><button class="btn" data-nav="daily">Pantau air harian</button><button class="btn" data-action="export-csv">${ico.download} Ekspor CSV</button>`)}
+function water(){const st=getStats(),rows=st.rows.slice().sort((a,b)=>b.period.localeCompare(a.period));const water=trend('water'),b3=trend('b3'),econ=trend('economic');return `${pageIntro('Industrial Water & Waste','Pantau konsumsi air, limbah insinerasi, dan valuable waste (dijual) per plant.',`<button class="btn btn-primary" data-action="new-consumption">Input data</button><button class="btn" data-nav="daily">Pantau air harian</button><button class="btn" data-action="export-csv">${ico.download} Ekspor CSV</button>`)}
  <div class="metric-compact"><div class="card"><div class="label">Industrial water YTD</div><div class="value">${nf(st.s.water)}<span class="unit">m³</span></div></div><div class="card"><div class="label">Discharge water (sewage) YTD</div><div class="value">${nf(st.s.discharge)}<span class="unit">m³</span></div></div><div class="card"><div class="label">Timbulan limbah insinerasi YTD</div><div class="value">${fmt(st.s.b3/1000,2)}<span class="unit">ton</span></div></div><div class="card"><div class="label">Valuable waste (dijual) YTD</div><div class="value">${fmt(st.s.economic/1000,2)}<span class="unit">ton</span></div></div></div>
  ${noticeCoverage(st)}<div class="two-col section-space"><section class="card card-pad">${header('Industrial Water Trend','Konsumsi air industri bulanan · m³')}<div class="chart-wrap">${chart([{name:'Industrial water',values:water,color:COLORS[1]}],'m³')}</div></section><section class="card card-pad">${header('Waste Generation Trend','Limbah insinerasi dan valuable waste · kg')}<div class="chart-wrap">${chart([{name:'Insinerasi',values:b3,color:COLORS[3]},{name:'Valuable waste (dijual)',values:econ,color:COLORS[2]}],'kg')}</div><div class="legend"><span><i style="background:${COLORS[3]}"></i>Limbah insinerasi</span><span><i style="background:${COLORS[2]}"></i>Valuable waste (dijual)</span></div></section></div>
  <section class="card card-pad section-space">${header('Water & Waste Log','Rekap per bulan dan plant')}${rows.length?`<div class="table-shell" style="margin-top:15px"><table><thead><tr><th>Periode</th><th>Plant</th><th>Industrial water (m³)</th><th>Limbah insinerasi (kg)</th><th>Valuable waste (dijual) (kg)</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${h(r.period)}</td><td><b>${h(plantName(r.plantId))}</b></td><td>${nf(r.water)}</td><td>${nf(r.b3)}</td><td>${nf(r.economic)}</td></tr>`).join('')}</tbody></table></div>`:empty('Belum ada data air dan limbah')}</section><p class="footnote">Satuan limbah diinput kg dan ditampilkan juga dalam ton. Data ini adalah total timbulan, belum dilengkapi manifest, transporter, tujuan pengolahan, atau klasifikasi detail limbah.</p>`}
 function kaizen(){const ks=relevantKaizens().slice().sort((a,b)=>b.start.localeCompare(a.start)),st=getStats();const monthly=ks.filter(k=>k.status==='verified'&&k.start<=ym(ui.year,ui.month)&&(!k.end||k.end>=ym(ui.year,ui.month))).reduce((a,k)=>a+sv(k.monthlySavingTon),0);let totalPlanned=ks.filter(k=>k.status==='planned').reduce((a,k)=>a+sv(k.monthlySavingTon),0);
- return `${pageIntro('Kaizen CO₂e Reduction Tracker','Penghematan bulanan yang diverifikasi dan diakumulasi berdasarkan tanggal efektif.',`<button class="btn btn-primary" data-action="new-kaizen">Kelola Kaizen di Sheet</button><button class="btn" data-action="export-kaizen">${ico.download} Ekspor CSV</button>`)}
+ return `${pageIntro('Kaizen CO₂e Reduction Tracker','Penghematan bulanan yang diverifikasi dan diakumulasi berdasarkan tanggal efektif.',`<button class="btn btn-primary" data-action="new-kaizen">Input Kaizen</button><button class="btn" data-action="export-kaizen">${ico.download} Ekspor CSV</button>`)}
  <div class="metric-compact"><div class="card"><div class="label">Kumulatif sejak mulai</div><div class="value">${fmt(st.kaizenLifetime,2)}<span class="unit">ton CO₂e</span></div></div><div class="card"><div class="label">Realisasi dalam ${ui.year}</div><div class="value">${fmt(st.kaizenYtd,2)}<span class="unit">ton CO₂e</span></div></div><div class="card"><div class="label">Pengurangan berjalan per bulan</div><div class="value">${fmt(monthly,2)}<span class="unit">ton/bln</span></div></div></div>
  <div class="two-col section-space"><section class="card card-pad">${header('Akumulasi Kaizen Bulanan','Kumulatif capaian terverifikasi sejak awal tahun ini')}<div class="chart-wrap">${chart([{name:'Kumulatif Kaizen YTD',color:COLORS[0],values:Array.from({length:ui.month},(_,i)=>ks.reduce((a,k)=>a+kaizenStats(k,ym(ui.year,i+1)).ytd,0))}],'ton CO₂e')}</div></section><section class="card card-pad">${header('Status Improvement','Proyek Kaizen berdasarkan status pencatatan')}<div class="inline-stat"><span>Proyek terverifikasi</span><b class="positive">${st.verified} proyek</b></div><div class="inline-stat"><span>Proyek masih rencana</span><b>${st.planned} proyek</b></div><div class="inline-stat"><span>Potensi rencana (belum dihitung)</span><b>${fmt(totalPlanned,2)} ton/bln</b></div><div class="notice notice-green">Kumulatif dihitung dari tanggal mulai sampai bulan filter, atau tanggal selesai jika diisi. Hanya status <b>Terverifikasi</b> yang masuk realisasi.</div></section></div>
  <section class="card card-pad section-space">${header('Kaizen Improvement Register','Daftar aktivitas; pilih Edit untuk memperbarui perhitungan atau status')}${ks.length?`<div class="table-shell" style="margin-top:15px"><table><thead><tr><th>Aktivitas / Plant</th><th>Efektif</th><th>Status</th><th>Pengurangan/bln</th><th>Realisasi YTD</th><th>Total Kumulatif</th></tr></thead><tbody>${ks.map(k=>{const a=kaizenStats(k);return `<tr><td><div class="plant-name">${h(k.title)}</div><div class="plant-sub">${h(plantName(k.plantId))} / ${h(k.department||'Belum ditentukan')} · ${h(k.category||'Improvement')}</div></td><td>${h(k.start)}${k.end?'<div class="plant-sub">s.d. '+h(k.end)+'</div>':''}</td><td><span class="data-badge ${k.status==='verified'?'success-badge':'pending-badge'}">${k.status==='verified'?'Terverifikasi':'Rencana'}</span></td><td><b>${fmt(k.monthlySavingTon,3)}</b> ton</td><td>${fmt(a.ytd,2)} ton</td><td><b>${fmt(a.lifetime,2)}</b> ton</td></tr>`}).join('')}</tbody></table></div>`:empty('Belum ada Kaizen')}</section><p class="footnote">Angka Kaizen merupakan perhitungan manfaat improvement berdasarkan data dan status yang diinput. Sistem tidak menambahkan manfaat Kaizen ke penurunan aktual agar tidak menghitung pengurangan yang sama dua kali.</p>`;
@@ -3527,10 +3527,10 @@ function inputConsumption(){const rec=db.records.find(r=>r.plantId===ui.entryPla
  <aside><div class="preview-panel"><small>LIVE CO₂e CALCULATION</small><div class="preview-value" id="recordTotal">0,00 <span>ton CO₂e</span></div><div class="preview-row"><span>Listrik</span><strong id="e-electricity">0 kg</strong></div><div class="preview-row"><span>Gas alam</span><strong id="e-gas">0 kg</strong></div><div class="preview-row"><span>Solar</span><strong id="e-diesel">0 kg</strong></div><div class="preview-row"><span>Bensin</span><strong id="e-gasoline">0 kg</strong></div></div><div class="card card-pad section-space"><h3 class="card-heading">Petunjuk Input</h3><p class="card-note" style="line-height:1.7;margin-top:9px">Satu record untuk kombinasi <b>plant + bulan</b>. Jika data sudah ada, formulir otomatis menampilkan nilai sebelumnya, lalu penyimpanan akan memperbaruinya.</p><div class="notice notice-green">Gunakan faktor emisi yang telah disetujui perusahaan. Nilai bawaan adalah koefisien resmi TJFI.</div><button class="btn" data-nav="settings">Atur faktor emisi</button></div></aside></div>`}
 function inputKaizen(){const k=db.kaizens.find(z=>z.id===ui.editingKaizen)||{},type=k.type||'electricity';return `<div class="input-layout"><section class="card card-pad"><form id="kaizenForm"><div class="form-grid"><div class="field full"><label for="kTitle">Nama aktivitas Kaizen *</label><input id="kTitle" required maxlength="150" placeholder="Contoh: Optimasi motor kompresor" value="${h(k.title||'')}"></div><div class="field"><label for="kPlant">Plant *</label><select id="kPlant" required>${plantOptions(k.plantId||ui.entryPlant)}</select></div><div class="field"><label for="kDepartment">Departemen pelaksana *</label><select id="kDepartment" required>${departmentOptions(k.plantId||ui.entryPlant,k.department||'')}</select></div><div class="field"><label for="kCategory">Kategori improvement</label><select id="kCategory">${['Efisiensi energi','Optimasi proses','Perilaku operasional','Penggantian peralatan','Lainnya'].map(x=>`<option ${k.category===x?'selected':''}>${h(x)}</option>`).join('')}</select></div><div class="field"><label for="kStart">Tanggal efektif (bulan) *</label><input type="month" id="kStart" required value="${h(k.start||ui.entryPeriod)}"></div><div class="field"><label for="kEnd">Bulan selesai (opsional)</label><input type="month" id="kEnd" value="${h(k.end||'')}"></div><div class="field"><label for="kStatus">Status verifikasi *</label><select id="kStatus"><option value="planned" ${k.status==='planned'?'selected':''}>Rencana (tidak dihitung)</option><option value="verified" ${k.status==='verified'?'selected':''}>Terverifikasi (dihitung)</option></select></div><div class="field"><label for="kType">Basis pengurangan per bulan *</label><select id="kType">${Object.entries(TYPES).map(([val,item])=>`<option value="${val}" ${type===val?'selected':''}>${h(item.label)}</option>`).join('')}</select></div><div class="field full"><label id="kAmountLabel" for="kAmount">Penghematan listrik per bulan (kWh)</label><input id="kAmount" type="number" required min="0" step="any" value="${k.amount??''}" placeholder="Masukkan besaran penghematan per bulan"><small id="kAmountHelp">Jika basis energi dipilih, sistem mengalikan penghematan dengan faktor emisi yang aktif.</small></div><div class="field full"><label for="kNotes">Keterangan dan dasar verifikasi</label><textarea id="kNotes" placeholder="Catatan pengukuran, bukti saving, referensi perhitungan...">${h(k.notes||'')}</textarea></div></div><div class="form-actions"><button type="submit" class="btn btn-primary">${ui.editingKaizen?'Perbarui Kaizen':'Simpan Kaizen'}</button><button type="button" class="btn" data-action="new-kaizen">Reset formulir</button></div></form></section>
  <aside><div class="preview-panel"><small>ESTIMASI PENGURANGAN BULANAN</small><div class="preview-value" id="kPreview">0,00 <span>ton CO₂e/bln</span></div><div class="preview-row"><span>Besaran penghematan</span><strong id="kSavingAmount">—</strong></div><div class="preview-row"><span>Faktor emisi</span><strong id="kFactor">—</strong></div><div class="preview-row"><span>Status</span><strong id="kStatusLabel">Rencana</strong></div></div><div class="card card-pad section-space"><h3 class="card-heading">Aturan Kumulatif</h3><div class="insight-list"><div class="insight-row"><div class="insight-icon">${ico.leaf}</div><div><div class="insight-title">Hanya terverifikasi</div><div class="insight-desc">Kaizen berstatus rencana tidak masuk realisasi.</div></div></div><div class="insight-row"><div class="insight-icon">${ico.down}</div><div><div class="insight-title">Diakumulasi bulanan</div><div class="insight-desc">Saving bulanan dihitung sejak bulan mulai sampai bulan filter atau bulan selesai.</div></div></div></div><div class="notice">Saving yang dimasukkan dianggap tetap tiap bulan. Untuk perubahan saving dari waktu ke waktu, diperlukan modul verifikasi bulanan dalam versi produksi.</div></div></aside></div>`}
-function input(){
+function sourceInfo(){
  const nm=db.records.length,nd=db.dailyReadings.length,nk=db.kaizens.length,live=LIVE_STATUS.mode==='live';
  const cols=(a)=>a.map(c=>`<code>${c}</code>`).join(' ');
- return `${pageIntro('Sumber Data','Dashboard membaca data langsung dari Google Spreadsheet. Input dan koreksi data dilakukan di spreadsheet, bukan di halaman ini.',`<a class="btn btn-primary" href="${SHEET_EDIT}" target="_blank" rel="noopener">Buka Google Sheet</a><button class="btn" data-action="reload-live">Muat ulang data</button>`)}
+ return `<div class="tag-row" style="margin-bottom:16px"><a class="btn btn-primary" href="${SHEET_EDIT}" target="_blank" rel="noopener">Buka Google Sheet</a><button class="btn" data-action="reload-live">Muat ulang data</button></div>
  <div class="grid-kpis">${kpi('Data Bulanan',nf(nm),'plant-bulan','Tab Monitoring','bolt')}${kpi('Data Harian',nf(nd),'pembacaan','Tab Harian · gas & air','water','blue')}${kpi('Aktivitas Kaizen',nf(nk),'aktivitas','Tab Kaizen','leaf')}${kpi('Status Data',live?'Live':'Cadangan','',live?('Diperbarui '+h(LIVE_STATUS.at)):('Sheet tidak terjangkau: '+h(LIVE_STATUS.msg)),'down',live?'':'orange')}</div>
  <section class="card card-pad section-space">${header('Struktur Google Sheet','Tiga tab dengan nama kolom di baris pertama. Urutan kolom bebas, nama kolom harus sama.')}
  <div class="table-shell" style="margin-top:15px"><table><thead><tr><th>Tab</th><th>Isi</th><th>Kolom</th></tr></thead><tbody>
@@ -3600,7 +3600,7 @@ function daily(){
  const scope=dailyScope(),all=dailyAnalyzed().filter(x=>dfp(x.row.date)===ym(ui.year,ui.month)&&dailyPlantOK(x)),isGas=ui.dailyType==='gas';
  const valid=scope.filter(x=>x.volume!==null),total=valid.reduce((sum,x)=>sum+x.volume,0),warnings=scope.filter(x=>x.status==='alert'),gap=scope.filter(x=>['gap','reset'].includes(x.status)),avgOf=a=>a.length?a.reduce((t,x)=>t+x.volume,0)/a.length:0,avgOp=avgOf(valid.filter(x=>x.row.operation!=='idle')),avgIdle=avgOf(valid.filter(x=>x.row.operation==='idle'));
  const depItems=ui.plant==='all'?[...new Set(db.plants.flatMap(p=>p.departments))]:departmentsFor(ui.plant);
- return `${pageIntro('Daily Gas & Water Monitoring','Pemakaian gas (hanya Plant 1) dan air per hari untuk menemukan pola abnormal dan potensi kebocoran.',`<button class="btn btn-primary" data-action="new-daily">Sumber data</button><button class="btn" data-action="daily-csv">${ico.download} Ekspor CSV</button>`)}
+ return `${pageIntro('Daily Gas & Water Monitoring','Pemakaian gas (hanya Plant 1) dan air per hari untuk menemukan pola abnormal dan potensi kebocoran.',`<button class="btn btn-primary" data-action="new-daily">Input data</button><button class="btn" data-action="daily-csv">${ico.download} Ekspor CSV</button>`)}
  <div class="daily-callout">⚠ <b>Indikasi kebocoran ≠ kebocoran terkonfirmasi.</b> Sistem menandai lonjakan pemakaian dan konsumsi saat non-operasi. Periksa jadwal produksi, maintenance, kalibrasi meter, dan jalur pipa sebelum menyimpulkan terjadi kebocoran. Angka konsumsi harian tidak otomatis digabungkan ke data bulanan atau emisi CO₂e, agar tidak double counting.</div>
  <div class="daily-toolbar"><div class="tabs" style="margin:0"><button class="tab ${ui.dailyType==='gas'?'active':''}" data-action="daily-type" data-type="gas">🔥 Gas · Plant 1</button><button class="tab ${ui.dailyType==='water'?'active':''}" data-action="daily-type" data-type="water">💧 Industrial Water</button></div></div>
  ${isGas&&ui.plant==='p-2'?'<div class="notice">PGN Gas hanya digunakan di Plant 1, sehingga filter plant diabaikan pada tab ini.</div>':''}
@@ -3671,7 +3671,7 @@ function action(name,el){switch(name){case'mobile-menu':document.getElementById(
  case'export-csv':exportCSV();break;case'export-kaizen':exportKaizen();break;
  case'export-json':download(JSON.stringify(db,null,2),'tjforge_environment_backup.json','application/json');toast('Backup JSON dibuat.');break;
  case'import-json':document.getElementById('fileImport')?.click();break;
- case'reset-demo':db.settings=seed().settings;store();reapply();render();toast('Pengaturan dikembalikan ke nilai resmi TJFI.');break;case'reload-live':loadLive(true);break;
+ case'reset-demo':db.settings=seed().settings;store();reapply();render();toast('Pengaturan dikembalikan ke nilai resmi TJFI.');break;case'reload-live':loadLive(true);break;case'in-tab':ui.tab=el.dataset.tab;render();break;case'save-url':{const u=(document.getElementById('wUrl')?.value||'').trim();if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(u)){toast('Alamat harus berakhiran /exec dan berasal dari script.google.com.');break}try{localStorage.setItem(WKEY,u)}catch(e){}render();toast('Alamat input disimpan di browser ini.');break}
  }}
 document.addEventListener('click',e=>{const n=e.target.closest('[data-nav]');if(n){e.preventDefault();navTo(n.dataset.nav);return}const a=e.target.closest('[data-action]');if(a){e.preventDefault();action(a.dataset.action,a)}});
 document.addEventListener('change',e=>{
@@ -3708,6 +3708,128 @@ document.addEventListener('submit',e=>{
   Object.assign(db.settings,vals);store();render();toast('Ambang monitoring harian diperbarui.');
  }
 });
+
+/* ===================== INPUT: tulis ke Google Sheet via Apps Script ===================== */
+const WRITE_URL='';
+const WKEY='tjfi-write-url-v1',PKEY='tjfi-passcode-v1';
+function writeUrl(){try{return WRITE_URL||localStorage.getItem(WKEY)||''}catch(e){return WRITE_URL}}
+function passcode(){try{return localStorage.getItem(PKEY)||''}catch(e){return ''}}
+const PENDING={mon:[],day:[],kz:[]},PEND_MS=20*60*1000;
+const kMon=r=>[r.fiscal_year,r.month,r.plant,r.item,r.sub_area||''].join('|'),kDay=r=>[String(r.date).slice(0,10),r.plant,r.item].join('|'),kKz=r=>r.kaizen_id;
+function upsertBy(arr,fn,row){const k=fn(row),i=arr.findIndex(x=>fn(x)===k);if(i>=0)arr[i]=row;else arr.push(row)}
+function addPending(t,row){PENDING[t].push({t:Date.now(),row})}
+function mergePending(src){const now=Date.now();const fns={mon:kMon,day:kDay,kz:kKz};for(const t of ['mon','day','kz']){PENDING[t]=PENDING[t].filter(p=>now-p.t<PEND_MS);for(const p of PENDING[t])upsertBy(src[t],fns[t],p.row)}}
+async function sendToSheet(payload){
+ const url=writeUrl();if(!url)throw new Error('Alamat Apps Script belum diatur.');
+ const pc=(document.getElementById('fPass')?.value||passcode()).trim();if(!pc)throw new Error('Kode akses wajib diisi.');
+ const r=await fetch(url,{method:'POST',body:JSON.stringify({...payload,passcode:pc})});
+ let j;try{j=await r.json()}catch(e){throw new Error('Respons server tidak terbaca (HTTP '+r.status+').')}
+ if(!j.ok)throw new Error(j.error||'Gagal menyimpan.');
+ try{localStorage.setItem(PKEY,pc)}catch(e){}
+ return j;
+}
+const MITEMS=[['electricity','Electricity','Listrik (kWh)','ENERGI'],['gas','PGN Gas','Gas alam PGN (m³) · hanya Plant 1'],['diesel','Solar','Solar (liter)'],['water','Supplied Water (Industrial Water)','Industrial water / supplied (m³)','AIR'],['discharge','Discharge Water (Sewage)','Discharge water / sewage (m³)'],['b3','Incineration without heat recovery','Limbah insinerasi (ton)','LIMBAH & PRODUKSI'],['economic','Valuable waste, sold materials','Valuable waste dijual (ton)'],['prod','Produksi','Produksi (ton)']];
+const plantLabel=id=>db.plants.find(p=>p.id===id)?.name||'Plant 1';
+function lastVal(list,pred){const r=(LAST?LAST[list]:[]).find(pred);return r?String(r.qty).replace(',','.'):''}
+function passField(){return `<div class="field full"><label for="fPass">Kode akses *</label><input id="fPass" type="password" autocomplete="off" required placeholder="Kode akses dari admin" value="${h(passcode())}"></div>`}
+function fyOptions(cur){const ys=[...new Set([...db.records.map(r=>+r.period.slice(0,4)),ui.year,ui.year+1])].sort((a,b)=>b-a);return ys.map(y=>`<option value="${y}" ${y===cur?'selected':''}>FY${y}</option>`).join('')}
+function setupCard(){return `<section class="card card-pad"><h3 class="card-heading">Aktifkan input ke Google Sheet</h3><p class="card-note" style="line-height:1.7">Sekali saja oleh admin. Setelah aktif, semua orang yang punya kode akses bisa mengisi data dari halaman ini.</p>
+ <ol style="line-height:1.9;margin:14px 0 0 18px;font-size:14px"><li>Buka <a href="${SHEET_EDIT}" target="_blank" rel="noopener"><b>Google Sheet</b></a> → menu <b>Extensions → Apps Script</b>.</li><li>Tempel isi file <b>Code.gs</b>, ganti nilai <code>PASSCODE</code>, lalu Save.</li><li><b>Deploy → New deployment → Web app</b>: Execute as <b>Me</b>, Who has access <b>Anyone</b> → Deploy, lalu izinkan akses.</li><li>Salin <b>Web app URL</b> (berakhiran <code>/exec</code>) dan tempel di bawah.</li></ol>
+ <div class="form-grid" style="margin-top:16px"><div class="field full"><label for="wUrl">Web app URL</label><input id="wUrl" placeholder="https://script.google.com/macros/s/…/exec"></div><div class="field full"><button class="btn btn-primary" type="button" data-action="save-url">Simpan alamat</button></div></div></section>`}
+function monthlyForm(){
+ ui.mPlant=ui.mPlant||'p-1';ui.mFy=ui.mFy||ui.year;ui.mMonth=ui.mMonth||ui.month;
+ const pn=plantLabel(ui.mPlant),mon=MONTHS[ui.mMonth-1];
+ const fields=MITEMS.filter(m=>!(m[0]==='gas'&&ui.mPlant!=='p-1')).map(m=>{
+  const v=lastVal('mon',r=>r.plant===pn&&+r.fiscal_year===ui.mFy&&r.month===mon&&r.item===m[1]&&!/^(1|true)$/i.test(r.is_check||''));
+  return (m[3]?`<div class="form-section-label">${m[3]}</div>`:'')+`<div class="field"><label for="m_${m[0]}">${m[2]}</label><input id="m_${m[0]}" type="number" min="0" step="any" inputmode="decimal" value="${h(v)}" placeholder="kosongkan jika belum ada"></div>`}).join('');
+ return `<div class="input-layout"><section class="card card-pad"><form id="fMonthly" data-live="1"><div class="form-grid">
+ <div class="field"><label for="mPlant">Plant *</label><select id="mPlant">${plantOptions(ui.mPlant)}</select></div>
+ <div class="field"><label for="mFy">Tahun fiskal *</label><select id="mFy">${fyOptions(ui.mFy)}</select></div>
+ <div class="field"><label for="mMonth">Bulan *</label><select id="mMonth">${MONTHS.map((m,i)=>`<option value="${i+1}" ${ui.mMonth===i+1?'selected':''}>${m}</option>`).join('')}</select></div>
+ ${fields}${passField()}</div><div class="form-actions"><button class="btn btn-primary" type="submit">Simpan ke Google Sheet</button></div></form></section>
+ <aside><div class="card card-pad"><h3 class="card-heading">Petunjuk</h3><p class="card-note" style="line-height:1.7;margin-top:9px">Satu bulan per plant. Kolom yang sudah terisi adalah data yang ada di Sheet; mengubahnya akan memperbarui baris yang sama. Kolom kosong tidak dikirim. Tahun fiskal berjalan April–Maret (FY2026 = Apr 2026–Mar 2027).</p></div></aside></div>`;
+}
+function dailyEntryForm(){
+ ui.dPlant=ui.dPlant||'p-1';ui.dDate=ui.dDate||new Date().toISOString().slice(0,10);
+ const pn=plantLabel(ui.dPlant),g=(it)=>lastVal('day',r=>r.plant===pn&&String(r.date).slice(0,10)===ui.dDate&&r.item===it);
+ const dow=new Date(ui.dDate+'T00:00:00Z').getUTCDay();
+ return `<div class="input-layout"><section class="card card-pad"><form id="fDaily" data-live="1"><div class="form-grid">
+ <div class="field"><label for="dPlant">Plant *</label><select id="dPlant">${plantOptions(ui.dPlant)}</select></div>
+ <div class="field"><label for="dDate">Tanggal *</label><input id="dDate" type="date" required value="${h(ui.dDate)}"></div>
+ <div class="form-section-label">PEMAKAIAN HARIAN${dow===0?' · HARI MINGGU (NON-OPERASI)':''}</div>
+ ${ui.dPlant==='p-1'?`<div class="field"><label for="d_gas">Gas alam PGN (m³)</label><input id="d_gas" type="number" min="0" step="any" inputmode="decimal" value="${h(g('PGN Gas'))}" placeholder="m³ per hari"></div>`:''}
+ <div class="field"><label for="d_water">Industrial water / supplied (m³)</label><input id="d_water" type="number" min="0" step="any" inputmode="decimal" value="${h(g('Supplied Water (Industrial Water)'))}" placeholder="m³ per hari"></div>
+ <div class="field"><label for="d_disc">Discharge water / sewage (m³)</label><input id="d_disc" type="number" min="0" step="any" inputmode="decimal" value="${h(g('Discharge Water (Sewage)'))}" placeholder="m³ per hari"></div>
+ ${passField()}</div><div class="form-actions"><button class="btn btn-primary" type="submit">Simpan ke Google Sheet</button></div></form></section>
+ <aside><div class="card card-pad"><h3 class="card-heading">Petunjuk</h3><p class="card-note" style="line-height:1.7;margin-top:9px">Isi total pemakaian satu hari (bukan angka meter kumulatif). PGN Gas hanya ada di Plant 1. Mengisi tanggal yang sudah ada akan memperbarui nilainya. Hari Minggu otomatis dianggap non-operasi untuk deteksi kebocoran.</p></div></aside></div>`;
+}
+const KUNIT={'Electricity':'kWh','PGN Gas':'m³','Solar':'liter'};
+function kaizenEntryForm(){
+ ui.kzSel=ui.kzSel||'';
+ const cur=ui.kzSel?(LAST?.kz||[]).find(r=>r.kaizen_id===ui.kzSel):null,v=(k,d='')=>cur?(cur[k]??d):d;
+ const plant=cur?.plant||'Plant 1',item=cur?.item||'Electricity',fy=Math.round(NUM(cur?.start_fiscal_year))||ui.year,sm=cur?.start_month||'Apr';
+ const st=/selesai|verif|done|complete/i.test(v('status'))?'Selesai':/berjalan|aktif/i.test(v('status'))?'Berjalan':'Rencana';
+ return `<div class="input-layout"><section class="card card-pad"><form id="fKaizen" data-live="1"><div class="form-grid">
+ <div class="field full"><label for="kzSel">Kaizen yang diedit</label><select id="kzSel"><option value="">— Kaizen baru —</option>${(LAST?.kz||[]).filter(r=>r.kaizen_id).map(r=>`<option value="${h(r.kaizen_id)}" ${r.kaizen_id===ui.kzSel?'selected':''}>${h(r.kaizen_id)} · ${h(r.title)}</option>`).join('')}</select></div>
+ <div class="field full"><label for="kzTitle">Nama aktivitas Kaizen *</label><input id="kzTitle" required maxlength="150" placeholder="Contoh: Optimasi motor kompresor" value="${h(v('title'))}"></div>
+ <div class="field"><label for="kzCat">Kategori</label><input id="kzCat" maxlength="60" placeholder="Contoh: Energy saving" value="${h(v('category'))}"></div>
+ <div class="field"><label for="kzPlant">Plant *</label><select id="kzPlant"><option ${plant==='Plant 1'?'selected':''}>Plant 1</option><option ${plant==='Plant 2'?'selected':''}>Plant 2</option></select></div>
+ <div class="field"><label for="kzItem">Sumber yang dihemat *</label><select id="kzItem">${['Electricity','PGN Gas','Solar'].map(i=>`<option value="${i}" ${i===item?'selected':''}>${i}</option>`).join('')}</select></div>
+ <div class="field"><label for="kzQty" id="kzQtyLbl">Penghematan per bulan (${KUNIT[item]}) *</label><input id="kzQty" type="number" min="0" step="any" inputmode="decimal" required value="${h(v('saving_qty_per_month'))}"></div>
+ <div class="field"><label for="kzFy">Mulai tahun fiskal *</label><select id="kzFy">${fyOptions(fy)}</select></div>
+ <div class="field"><label for="kzMonth">Mulai bulan *</label><select id="kzMonth">${MONTHS.map(m=>`<option ${m===sm?'selected':''}>${m}</option>`).join('')}</select></div>
+ <div class="field"><label for="kzStatus">Status *</label><select id="kzStatus">${['Rencana','Berjalan','Selesai'].map(x=>`<option ${x===st?'selected':''}>${x}</option>`).join('')}</select></div>
+ <div class="field"><label for="kzPic">PIC</label><input id="kzPic" maxlength="80" value="${h(v('pic'))}"></div>
+ <div class="field full"><label for="kzNotes">Catatan</label><textarea id="kzNotes" placeholder="Metode perhitungan, bukti verifikasi, dsb.">${h(v('notes'))}</textarea></div>
+ ${passField()}</div><div class="form-actions"><button class="btn btn-primary" type="submit">Simpan ke Google Sheet</button></div></form></section>
+ <aside><div class="card card-pad"><h3 class="card-heading">Aturan Kaizen</h3><p class="card-note" style="line-height:1.7;margin-top:9px">Hanya status <b>Berjalan</b> dan <b>Selesai</b> yang dihitung sebagai realisasi pengurangan CO₂e; <b>Rencana</b> ditampilkan terpisah. Penghematan dihitung dari jumlah per bulan × koefisien emisi, sejak bulan mulai.</p></div></aside></div>`;
+}
+function input(){
+ if(!['monthly','daily','kaizen','source'].includes(ui.tab))ui.tab='monthly';
+ const tabs=[['monthly','⚡ Data Bulanan'],['daily','💧 Gas & Air Harian'],['kaizen','♻ Kaizen'],['source','🔗 Sumber Data']];
+ const on=!!writeUrl();
+ return `${pageIntro('Input Data','Data disimpan langsung ke Google Sheet dan menjadi sumber seluruh dashboard.',`<span class="chip">${on?'Terhubung ke Google Sheet':'Input belum diaktifkan'}</span>`)}
+ <div class="tabs">${tabs.map(([k,l])=>`<button class="tab ${ui.tab===k?'active':''}" data-action="in-tab" data-tab="${k}">${l}</button>`).join('')}</div>
+ ${ui.tab==='source'?sourceInfo():!on?setupCard():ui.tab==='monthly'?monthlyForm():ui.tab==='daily'?dailyEntryForm():kaizenEntryForm()}`;
+}
+async function handleLiveSubmit(id){
+ const btn=document.querySelector('#'+id+' button[type=submit]');const old=btn?.textContent;if(btn){btn.disabled=true;btn.textContent='Menyimpan…'}
+ try{
+  if(id==='fMonthly'){
+   const pn=plantLabel(ui.mPlant),mon=MONTHS[ui.mMonth-1],rows=[];
+   for(const m of MITEMS){const el=document.getElementById('m_'+m[0]);if(!el||el.value==='')continue;rows.push({fiscal_year:ui.mFy,month:mon,plant:pn,item:m[1],qty:Number(el.value)})}
+   if(!rows.length)throw new Error('Isi minimal satu kolom.');
+   const j=await sendToSheet({type:'monitoring',rows});
+   rows.forEach(r=>{const row={...r,sub_area:'',is_check:'FALSE'};addPending('mon',row)});
+   toast(`Tersimpan di Google Sheet (${j.inserted||0} baru, ${j.updated||0} diperbarui).`);
+  }else if(id==='fDaily'){
+   const pn=plantLabel(ui.dPlant),rows=[];
+   const add=(el,item)=>{const e=document.getElementById(el);if(e&&e.value!=='')rows.push({date:ui.dDate,plant:pn,item,qty:Number(e.value)})};
+   add('d_gas','PGN Gas');add('d_water','Supplied Water (Industrial Water)');add('d_disc','Discharge Water (Sewage)');
+   if(!rows.length)throw new Error('Isi minimal satu kolom.');
+   const j=await sendToSheet({type:'harian',rows});
+   const y=+ui.dDate.slice(0,4),mo=+ui.dDate.slice(5,7);
+   rows.forEach(r=>addPending('day',{...r,fiscal_year:mo>=4?y:y-1,month:MONTHS[mo>=4?mo-4:mo+8]}));
+   toast(`Tersimpan di Google Sheet (${j.inserted||0} baru, ${j.updated||0} diperbarui).`);
+  }else if(id==='fKaizen'){
+   const g=x=>document.getElementById(x).value.trim();
+   const row={kaizen_id:ui.kzSel||'',title:g('kzTitle'),category:g('kzCat'),plant:g('kzPlant'),item:g('kzItem'),saving_qty_per_month:Number(g('kzQty')),start_fiscal_year:Number(g('kzFy')),start_month:g('kzMonth'),status:g('kzStatus'),pic:g('kzPic'),notes:g('kzNotes')};
+   const j=await sendToSheet({type:'kaizen',row});
+   addPending('kz',{...row,kaizen_id:j.kaizen_id||row.kaizen_id,unit:KUNIT[row.item]});
+   ui.kzSel='';toast(`Kaizen tersimpan di Google Sheet (${j.kaizen_id}).`);
+  }
+  const src=LAST||{mon:[],day:[],kz:[]};mergePending(src);applyData(src,false);render();
+ }catch(err){toast('Gagal menyimpan: '+err.message);if(btn){btn.disabled=false;btn.textContent=old}}
+}
+document.addEventListener('submit',e=>{const f=e.target;if(!f.dataset||!f.dataset.live)return;e.preventDefault();handleLiveSubmit(f.id)});
+document.addEventListener('change',e=>{const id=e.target.id,v=e.target.value;
+ if(id==='mPlant'){ui.mPlant=v;render()}else if(id==='mFy'){ui.mFy=+v;render()}else if(id==='mMonth'){ui.mMonth=+v;render()}
+ else if(id==='dPlant'){ui.dPlant=v;render()}else if(id==='dDate'){if(v)ui.dDate=v;render()}
+ else if(id==='kzSel'){ui.kzSel=v;render()}
+ else if(id==='kzItem'){const l=document.getElementById('kzQtyLbl');if(l)l.textContent='Penghematan per bulan ('+KUNIT[v]+') *'}
+ else if(id==='kzPlant'){const it=document.getElementById('kzItem');if(it&&v==='Plant 2'&&it.value==='PGN Gas'){it.value='Electricity';it.dispatchEvent(new Event('change',{bubbles:true}))}}
+});
+
 async function fetchTab(name){
  const r=await fetch(SHEET_PUB+'?gid='+SHEET_TABS[name]+'&single=true&output=csv&_='+Date.now(),{cache:'no-store'});
  if(!r.ok)throw new Error(name+': HTTP '+r.status);
@@ -3726,8 +3848,7 @@ async function loadLive(manual){
  LIVE_STATUS={mode:'memuat',at:'',msg:''};setBadge();
  try{
   const [tm,th,tk]=await Promise.all([fetchTab('monitoring'),fetchTab('harian'),fetchTab('kaizen')]);
-  const src=parseAll(tm,th,tk);
-  const probe=db.records.length;
+  const src=parseAll(tm,th,tk);mergePending(src);
   applyData(src,false);
   if(!db.records.length)throw new Error('tab Monitoring tidak berisi data yang dikenali');
   LIVE_STATUS={mode:'live',at:new Date().toLocaleString('id-ID',{dateStyle:'short',timeStyle:'short'}),msg:''};
