@@ -3601,20 +3601,26 @@ function energy(){const st=getStats(),f=db.settings.factors,rows=st.rows.slice()
  <div class="notice">Faktor emisi resmi TJFI yang aktif: listrik ${f.electricity} kg CO₂e/kWh; gas ${f.gas} kg CO₂e/m³; solar ${f.diesel} kg CO₂e/L. Ubah di <button class="linkish" data-nav="settings">Pengaturan</button>.</div>`;
 }
 const PCOL={'p-1':'#528cb6','p-2':'#e09a3e'};
-function wwWindow(){const n=ui.wwRange==='3'?3:ui.wwRange==='6'?6:ui.month,start=Math.max(0,ui.month-n);return {start,labels:MONTHS.slice(start,ui.month)}}
-function wwChart(key,unit,div,dec,colorFallback){
- const w=wwWindow(),plants=ui.plant==='all'?db.plants:db.plants.filter(p=>p.id===ui.plant);
- const series=plants.map(p=>({name:p.name,color:plants.length>1?(PCOL[p.id]||colorFallback):colorFallback,values:trend(key,[p],ui.year,ui.month).slice(w.start).map(v=>v===null?NaN:v/div)}));
- const legend=plants.length>1?`<div class="legend" style="margin:6px 0 0">${plants.map(p=>`<span><i style="background:${PCOL[p.id]||colorFallback}"></i>${h(p.name)}</span>`).join('')}</div>`:'';
- return legend+`<div class="chart-wrap">${chart(series,unit,{labels:w.labels,dec,h:300,maxBar:42})}</div>`;
+function wwSel(key){const u=(ui.ww||{})[key];return u||{fy:ui.year,from:1,to:ui.month}}
+function wwSelectors(key){
+ const c=wwSel(key),years=[...new Set(db.records.map(r=>+r.period.slice(0,4)))].sort((x,y)=>y-x);
+ const mo=(cur)=>MONTHS.map((m,i)=>`<option value="${i+1}" ${i+1===cur?'selected':''}>${m}</option>`).join('');
+ const sel=`font-size:13px;padding:7px 9px;border:1px solid #dbe5df;border-radius:10px;background:#fff`;
+ return `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><label class="plant-sub" style="display:flex;gap:5px;align-items:center;margin:0">Tahun fiskal<select id="ww_${key}_fy" style="${sel}">${years.map(y=>`<option value="${y}" ${y===c.fy?'selected':''}>FY${y}</option>`).join('')}</select></label><label class="plant-sub" style="display:flex;gap:5px;align-items:center;margin:0">Dari<select id="ww_${key}_from" style="${sel}">${mo(c.from)}</select></label><label class="plant-sub" style="display:flex;gap:5px;align-items:center;margin:0">Sampai<select id="ww_${key}_to" style="${sel}">${mo(c.to)}</select></label></div>`;
 }
-function wwRangeBar(){const o=[['all','Tahun fiskal berjalan'],['6','6 bulan terakhir'],['3','3 bulan terakhir']];if(!['all','6','3'].includes(ui.wwRange))ui.wwRange='all';return `<div class="tabs" style="margin:0">${o.map(([k,l])=>`<button class="tab ${ui.wwRange===k?'active':''}" data-action="ww-range" data-v="${k}">${l}</button>`).join('')}</div>`}
+function wwSeries(key,p,fy,from,to,div){const out=[];for(let m=from;m<=to;m++){const rows=db.records.filter(r=>r.period===ym(fy,m)&&r.plantId===p.id);out.push(rows.length?sums(rows)[key]/div:NaN)}return out}
+function wwChart(key,unit,div,dec,colorFallback){
+ const c=wwSel(key),plants=ui.plant==='all'?db.plants:db.plants.filter(p=>p.id===ui.plant),labels=MONTHS.slice(c.from-1,c.to).map(m=>m+(c.from===1&&c.to===12?'':''));
+ const series=plants.map(p=>({name:p.name,color:plants.length>1?(PCOL[p.id]||colorFallback):colorFallback,values:wwSeries(key,p,c.fy,c.from,c.to,div)}));
+ const legend=plants.length>1?`<div class="legend" style="margin:6px 0 0">${plants.map(p=>`<span><i style="background:${PCOL[p.id]||colorFallback}"></i>${h(p.name)}</span>`).join('')}</div>`:'';
+ const cap=`<div class="plant-sub" style="margin-top:4px">FY${c.fy} · ${MONTHS[c.from-1]}–${MONTHS[c.to-1]}</div>`;
+ return legend+cap+`<div class="chart-wrap">${chart(series,unit,{labels,dec,h:300,maxBar:42})}</div>`;
+}
 function water(){const st=getStats(),rows=st.rows.slice().sort((a,b)=>b.period.localeCompare(a.period));return `${pageIntro('Industrial Water & Waste','Pantau konsumsi air, limbah insinerasi, dan valuable waste (dijual) per plant.',`<button class="btn btn-primary" data-action="new-consumption">Input data</button><button class="btn" data-nav="daily">Pantau air harian</button><button class="btn" data-action="export-csv">${ico.download} Ekspor CSV</button>`)}
  <div class="metric-compact"><div class="card"><div class="label">Industrial water YTD</div><div class="value">${nf(st.s.water)}<span class="unit">m³</span></div></div><div class="card"><div class="label">Discharge water (sewage) YTD</div><div class="value">${nf(st.s.discharge)}<span class="unit">m³</span></div></div><div class="card"><div class="label">Timbulan limbah insinerasi YTD</div><div class="value">${fmt(st.s.b3/1000,2)}<span class="unit">ton</span></div></div><div class="card"><div class="label">Valuable waste (dijual) YTD</div><div class="value">${fmt(st.s.economic/1000,2)}<span class="unit">ton</span></div></div></div>
- ${noticeCoverage(st)}<div class="toolbar section-space" style="align-items:center"><div><b>Rentang grafik</b><div class="plant-sub">Berakhir di ${MONTHS[ui.month-1]} FY${ui.year}; ubah bulan dan tahun di pojok kanan atas.</div></div>${wwRangeBar()}</div>
- <section class="card card-pad section-space">${header('Industrial Water Trend','Konsumsi air industri bulanan per plant · m³')}${wwChart('water','m³',1,undefined,COLORS[1])}</section>
- <section class="card card-pad section-space">${header('Limbah Insinerasi','Timbulan limbah insinerasi bulanan per plant · ton')}${wwChart('b3','ton',1000,2,COLORS[3])}</section>
- <section class="card card-pad section-space">${header('Valuable Waste (dijual)','Limbah bernilai yang dijual bulanan per plant · ton')}${wwChart('economic','ton',1000,2,COLORS[2])}</section>
+ ${noticeCoverage(st)} <section class="card card-pad section-space">${header('Industrial Water Trend','Konsumsi air industri bulanan per plant · m³',wwSelectors('water'))}${wwChart('water','m³',1,undefined,COLORS[1])}</section>
+ <section class="card card-pad section-space">${header('Limbah Insinerasi','Timbulan limbah insinerasi bulanan per plant · ton',wwSelectors('b3'))}${wwChart('b3','ton',1000,2,COLORS[3])}</section>
+ <section class="card card-pad section-space">${header('Valuable Waste (dijual)','Limbah bernilai yang dijual bulanan per plant · ton',wwSelectors('economic'))}${wwChart('economic','ton',1000,2,COLORS[2])}</section>
  <section class="card card-pad section-space">${header('Water & Waste Log','Rekap per bulan dan plant')}${rows.length?`<div class="table-shell" style="margin-top:15px"><table><thead><tr><th>Periode</th><th>Plant</th><th>Industrial water (m³)</th><th>Limbah insinerasi (kg)</th><th>Valuable waste (dijual) (kg)</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${h(periodLabel(r.period))}</td><td><b>${h(plantName(r.plantId))}</b></td><td>${nf(r.water)}</td><td>${nf(r.b3)}</td><td>${nf(r.economic)}</td></tr>`).join('')}</tbody></table></div>`:empty('Belum ada data air dan limbah')}</section><p class="footnote">Grafik limbah ditampilkan dalam ton (tabel log dalam kg). Data ini adalah total timbulan, belum dilengkapi manifest, transporter, tujuan pengolahan, atau klasifikasi detail limbah.</p>`}
 function periodLabel(p){const fy=+p.slice(0,4),i=+p.slice(5),m=i<=9?i+3:i-9,y=i<=9?fy:fy+1;return ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][m-1]+' '+y}
 function kzImpact(){
@@ -3974,6 +3980,8 @@ async function handleLiveSubmit(id){
 }
 document.addEventListener('submit',e=>{const f=e.target;if(!f.dataset||!f.dataset.live)return;e.preventDefault();handleLiveSubmit(f.id)});
 document.addEventListener('change',e=>{const id=e.target.id,v=e.target.value;
+ const wm=/^ww_(water|b3|economic)_(fy|from|to)$/.exec(id);
+ if(wm){const key=wm[1],f=wm[2];ui.ww=ui.ww||{};const c={...wwSel(key)};c[f]=+v;if(f==='from'&&c.from>c.to)c.to=c.from;if(f==='to'&&c.to<c.from)c.from=c.to;ui.ww[key]=c;render();return}
  if(id==='mPlant'){ui.mPlant=v;render()}else if(id==='mFy'){ui.mFy=+v;render()}else if(id==='mMonth'){ui.mMonth=+v;render()}
  else if(id==='dPlant'){ui.dPlant=v;render()}else if(id==='dDate'){if(v)ui.dDate=v;render()}
  else if(id==='kzSel'){ui.kzSel=v;render()}
