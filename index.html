@@ -112,7 +112,7 @@ const SHEET_EDIT='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/edit';
 const SHEET_PUB='https://docs.google.com/spreadsheets/d/e/2PACX-1vR61ywI1X2-ZETRlSobcRrFa8nJMDBoK5tOFX6hzDhIk84c7kNsUjOPW-cdjtoQ8A2tHNVFI70KSC_J/pub';
 const SHEET_TABS={monitoring:0,harian:348949012,kaizen:1112057117};
 const SKEY='tjfi-settings-v3';
-const ELEC_FACTOR=.783; // kg CO₂e/kWh — koefisien listrik Indonesia (resmi, dikunci)
+const ELEC_FACTOR=.7528, ELEC_V=2; // kg CO₂e/kWh — nilai awal koefisien listrik; dapat diubah di Pengaturan (ELEC_V menaikkan nilai awal untuk browser yang menyimpan nilai lama)
 const FY_IDX=Object.fromEntries(MONTHS.map((m,i)=>[m,i+1]));
 const PLANT_IDS={'Plant 1':'p-1','Plant 2':'p-2'};
 const ITEM_FIELD={'Electricity':'electricity','PGN Gas':'gas','Solar':'diesel','Supplied Water (Industrial Water)':'water','Discharge Water (Sewage)':'discharge','Incineration without heat recovery':'b3','Valuable waste, sold materials':'economic'};
@@ -133,7 +133,7 @@ function seed(){
    dailyAlertPct:30,gasIdleLimit:100,waterIdleLimit:30,gasMinimumIncrease:5,waterMinimumIncrease:5}};
 }
 function validDB(d){return d&&Array.isArray(d.plants)&&Array.isArray(d.records)&&Array.isArray(d.kaizens)&&d.settings&&d.settings.factors;}
-function load(){const d=seed();try{const s=JSON.parse(localStorage.getItem(SKEY));if(s&&s.factors)d.settings={...d.settings,...s,factors:{...d.settings.factors,...s.factors}}}catch(e){}d.settings.factors.electricity=ELEC_FACTOR;return d}
+function load(){const d=seed();try{const s=JSON.parse(localStorage.getItem(SKEY));if(s&&s.factors){if(s.elecV!==ELEC_V)delete s.factors.electricity;d.settings={...d.settings,...s,factors:{...d.settings.factors,...s.factors}}}}catch(e){}d.settings.elecV=ELEC_V;return d}
 
 function splitCsv(line){const out=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];
  if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++}else inQ=!inQ}else if(ch===','&&!inQ){out.push(cur);cur=''}else cur+=ch}
@@ -4136,7 +4136,7 @@ document.addEventListener('submit',e=>{
   const get=(id)=>Number(document.getElementById(id).value);
   const f={electricity:get('sElectricity'),gas:get('sGas'),diesel:get('sDiesel'),gasoline:get('sGasoline')};
   if(Object.values(f).some(v=>!Number.isFinite(v)||v<0))return toast('Faktor emisi harus berupa angka positif.');
-  db.settings={...db.settings,factors:f,baselineYear:get('sBaseline'),targetReductionPct:get('sTarget')};store();reapply();render();toast('Faktor emisi dan target diperbarui.');
+  db.settings={...db.settings,factors:f,elecV:ELEC_V,baselineYear:get('sBaseline'),targetReductionPct:get('sTarget')};store();reapply();render();toast('Faktor emisi dan target diperbarui.');
  }
  else if(e.target.id==='dailySettingsForm'){
   const get=(id)=>Number(document.getElementById(id).value);
