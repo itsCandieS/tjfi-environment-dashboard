@@ -4002,11 +4002,12 @@ function monthChart(rows,color,label){
  const {y,m,n}=monthDays(),pad=v=>String(v).padStart(2,'0'),by=new Map();
  for(const x of rows){if(x.volume===null)continue;const d=+x.row.date.slice(8,10),e=by.get(d)||{v:0,alert:false};e.v+=x.volume;e.alert=e.alert||x.status==='alert';by.set(d,e)}
  if(!by.size)return `<div class="plant-sub" style="padding:18px 0">${h(label)}: belum ada data harian pada ${MONTHS[ui.month-1]} ${ui.year}.</div>`;
- const W=760,H=190,L=54,R=14,T=14,B=30,max=Math.max(1,...[...by.values()].map(e=>e.v))*1.2,w=(W-L-R)/n;
+ const W=760,H=230,L=54,R=14,T=14,B=30,max=Math.max(1,...[...by.values()].map(e=>e.v))*1.2,w=(W-L-R)/n;
  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik konsumsi harian ${h(label)}">`;
  for(let k=0;k<5;k++){const yy=T+(H-T-B)*k/4,v=max*(1-k/4);svg+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#e4ebe8" stroke-dasharray="4 4"/><text x="${L-7}" y="${yy+4}" text-anchor="end" font-size="11" fill="#84958e">${nf(v,0)}</text>`}
  for(let d=1;d<=n;d++){const e=by.get(d),x=L+(d-1)*w+w*.15;
   if(e){const bar=Math.max(1,e.v/max*(H-T-B));svg+=`<rect x="${x}" y="${H-B-bar}" width="${Math.max(3,w*.7)}" height="${bar}" rx="2" fill="${e.alert?'#d76467':color}"><title>${pad(d)}/${pad(m)}/${y} • ${h(label)} • ${nf(e.v,2)} m³${e.alert?' • perlu pemeriksaan':''}</title></rect>`}
+  if(e){const bar=Math.max(1,e.v/max*(H-T-B)),cx=x+Math.max(3,w*.7)/2,txt=nf(e.v,e.v>=100||Number.isInteger(e.v)?0:1);svg+=`<text transform="translate(${cx+3.2} ${H-B-bar-4}) rotate(-90)" font-size="9.5" font-weight="600" fill="${e.alert?'#b24246':'#3f524b'}">${txt}</text>`}
   const wk=new Date(Date.UTC(y,m-1,d)).getUTCDay(),we=wk===0||wk===6;
   svg+=`<text x="${x+w*.35}" y="${H-14}" text-anchor="middle" font-size="${n>30?9.5:10}" ${we?'font-weight="700" fill="#d03a3f"':'fill="#7e918a"'}>${d}</text>`}
  svg+=`<text x="${W-R}" y="${H-2}" text-anchor="end" font-size="10" fill="#75877f">${monthName()} · tanggal 1–${n} · batang merah = anomali · tanggal merah = Sabtu/Minggu</text></svg>`;return svg;
